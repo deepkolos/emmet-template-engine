@@ -46,7 +46,7 @@ tester.push(function(id){
   });
 
   var result = [
-    `<div id="id_covered" class="class_0 imported_str imported_arr_0,imported_arr_1"></div>`
+    `<div id="id_covered" class="class_0 imported_str imported_arr_0 imported_arr_1"></div>`
   ];
 
   test.parse().forEach(function(element,i){

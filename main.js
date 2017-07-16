@@ -118,8 +118,13 @@ function Emmet(str,data){
           }else
             value = parseValue(value);
 
-          elemment.class.push(value);
-
+          if(value instanceof Array){
+            value.forEach(function(i){
+              elemment.class.push(i);
+            });
+          }else //直接量时
+            elemment.class.push(value);
+          
           startIndex = nextDecorate;
         break;
         case '#':
