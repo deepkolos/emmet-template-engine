@@ -141,68 +141,65 @@ function Emmet(str,data){
         break;
         case '[':
           closeSymbolIndex = this.sourseStr.indexOf(']' ,startIndex+1);
-          if(closeSymbolIndex === nextDecorate){
-            value = this.sourseStr.slice(startIndex+1 , closeSymbolIndex).trim();
-            tmp = value.split(' ');
-            nodeAttrValues = {};
-            objAttrValues = {};
-            tmp.forEach(function(str,i) {
-              var attr,importKeyValue,importObj;
 
-              importKeyValue = function(fromMatch, attributeType, toWhere){
-                if(fromMatch[1][0] == '$'){
-                  getObjectOf(elemment,'noneDetermineValue/'+attributeType+'/key')[fromMatch[1]] = fromMatch[1];
-                }else
-                  fromMatch[1] = parseValue(fromMatch[1]);
+          value = this.sourseStr.slice(startIndex+1 , closeSymbolIndex).trim();
+          tmp = value.split(' ');
+          nodeAttrValues = {};
+          objAttrValues = {};
+          tmp.forEach(function(str,i) {
+            var attr,importKeyValue,importObj;
 
-                if(fromMatch[2][0] == '$'){
-                  getObjectOf(elemment,'noneDetermineValue/'+attributeType+'/value')[fromMatch[1]] = fromMatch[2];
-                }else
-                  fromMatch[2] = parseValue(fromMatch[2]);
+            importKeyValue = function(fromMatch, attributeType, toWhere){
+              if(fromMatch[1][0] == '$'){
+                getObjectOf(elemment,'noneDetermineValue/'+attributeType+'/key')[fromMatch[1]] = fromMatch[1];
+              }else
+                fromMatch[1] = parseValue(fromMatch[1]);
 
-                toWhere[fromMatch[1]] = fromMatch[2];
-              };
-              importObj = function(attributeType,toWhere){
-                if(str[0] == '$'){
-                  getObjectOf(elemment,'noneDetermineValue/'+attributeType+'/arr')[i] = str;
-                }else{
-                  tmp_arr = parseValue(str);
-                  if(tmp_arr instanceof Object)
-                    forEachObject(tmp_arr,function(value,key){
-                      toWhere[key] = value;
-                    });
-                  else
-                    console.log('%c属性导入仅支持Object类型~~',console_notice_style);
-                }
-              };
+              if(fromMatch[2][0] == '$'){
+                getObjectOf(elemment,'noneDetermineValue/'+attributeType+'/value')[fromMatch[1]] = fromMatch[2];
+              }else
+                fromMatch[2] = parseValue(fromMatch[2]);
 
-              if(str.indexOf('=>') == -1){
-                attr = str.match(/([a-zA-Z0-9-_@\$]+)=['"]*([^'">]*)['"]*/i);
-                if(attr)
-                  importKeyValue(attr,'nodeAttribute',nodeAttrValues);
+              toWhere[fromMatch[1]] = fromMatch[2];
+            };
+            importObj = function(attributeType,toWhere){
+              if(str[0] == '$'){
+                getObjectOf(elemment,'noneDetermineValue/'+attributeType+'/arr')[i] = str;
               }else{
-                attr = str.match(/([a-zA-Z0-9-_@\$]+)=>['"]*([^'">]*)['"]*/i);
-                if(attr)
-                  importKeyValue(attr,'objAttribute',objAttrValues);
+                tmp_arr = parseValue(str);
+                if(tmp_arr instanceof Object)
+                  forEachObject(tmp_arr,function(value,key){
+                    toWhere[key] = value;
+                  });
+                else
+                  console.log('%c属性导入仅支持Object类型~~',console_notice_style);
               }
+            };
 
-              if(!attr){
-                if(str.indexOf('=>') == 0){
-                  str = str.slice(2);
-                  importObj('objAttribute',objAttrValues);
-                }else if(str.indexOf('=') == 0){
-                  str = str.slice(1);
-                  importObj('nodeAttribute',nodeAttrValues);
-                }
+            if(str.indexOf('=>') == -1){
+              attr = str.match(/([a-zA-Z0-9-_@\$]+)=['"]*([^'">]*)['"]*/i);
+              if(attr)
+                importKeyValue(attr,'nodeAttribute',nodeAttrValues);
+            }else{
+              attr = str.match(/([a-zA-Z0-9-_@\$]+)=>['"]*([^'">]*)['"]*/i);
+              if(attr)
+                importKeyValue(attr,'objAttribute',objAttrValues);
+            }
+
+            if(!attr){
+              if(str.indexOf('=>') == 0){
+                str = str.slice(2);
+                importObj('objAttribute',objAttrValues);
+              }else if(str.indexOf('=') == 0){
+                str = str.slice(1);
+                importObj('nodeAttribute',nodeAttrValues);
               }
-            }, this);
+            }
+          }, this);
 
-            elemment.nodeAttribute = nodeAttrValues;
-            elemment.objAttribute = objAttrValues;
-            startIndex = nextDecorate + 1;
-          }else{
-            //error
-          }
+          elemment.nodeAttribute = nodeAttrValues;
+          elemment.objAttribute = objAttrValues;
+          startIndex = closeSymbolIndex + 1;
         break;
         case '{':
           closeSymbolIndex = this.sourseStr.indexOf('}' ,startIndex+1);
