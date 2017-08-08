@@ -280,5 +280,44 @@ tester.push(function(id){
   });
 });
 
-// tester.run(tester.length-1);
-tester.run();
+tester.push(function (id) {
+  var test = new Emmet(`
+    div[style="width:100vw;height:100vh;"] > (
+      div.topBar.flex > ( 
+        div.back[click="#back"] > 
+          img[src="/data/littleChat/topbar-back-icon.png" alt=""]
+        ) + (
+          div.center.flex >
+            div.inputBar.flex > (
+              div.icon.search >
+                img[src="/data/littleChat/search-small-icon.png" alt=""]
+            ) + (
+              input[type="text" class="input" placeholder="搜索"]
+            ) + (
+              div.icon.voice >
+                img[src="/data/littleChat/voice-small-icon.png" alt=""]
+            )
+        )
+      ) +
+      div.main[style="height:calc(100vh-45px);"]
+  `);
+
+  test.bindData({
+    
+  });
+
+  var result = [
+    `<div>click and mousemove</div>`
+  ];
+
+  test.parse().forEach(function (element, i) {
+    if (element.outerHTML != result[i]) {
+      tester.fail(id, element, result[i]);
+    } else
+      tester.success(id, element);
+
+  });
+});
+
+tester.run(tester.length-1);
+// tester.run();

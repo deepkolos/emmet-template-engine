@@ -95,7 +95,7 @@ function Emmet(str,data){
         startIndex = parsingIndex,
         tmp_arr;
 
-    while(startIndex != nextConnect){
+    while (startIndex < nextConnect ){
       var nextDecorate = closestSymbolIndex(decorateSymbols, startIndex+1),
           value, values, tmp, closeSymbolIndex;
 
@@ -220,7 +220,7 @@ function Emmet(str,data){
       }
     }
 
-    return nextConnect;
+    return startIndex;
   }.bind(this);
 
   var parseTagName = function(){
