@@ -151,8 +151,42 @@ function Emmet(str,data){
           closeSymbolIndex = this.sourseStr.indexOf(']' ,startIndex+1);
 
           value = this.sourseStr.slice(startIndex+1 , closeSymbolIndex).trim();
-          tmp = value.match(/([\d\w\@\$]*)=>?['"]*([^'"]*)['"]*/g);
 
+          function splitAttr(str){
+            var attrs = [],key,
+              strLen = str.length,
+              equalIndex,separator,endIndex;
+
+            for (var i = 0; i < strLen;){
+              equalIndex = str.indexOf('=',i);
+
+              if(str[equalIndex+1] == '>')
+                equalIndex++;
+              
+              separator = str[equalIndex + 1];
+              if(separator == '"' || separator == "'"){
+                endIndex = str.indexOf(separator, equalIndex + 2);
+                key = str.slice(i, endIndex+1);
+              }else{
+                endIndex = str.indexOf(' ', equalIndex + 1);
+                key = str.slice(i, endIndex);
+              }
+
+              if(endIndex == -1){
+                endIndex = strLen;
+                key = str.slice(i, endIndex);
+                attrs.push(key);
+                break;
+              }
+              attrs.push(key);
+              while ("\n\t\r ".indexOf(str[++endIndex]) > -1);
+              i = endIndex;
+            }
+
+            return attrs;
+          }
+
+          tmp = splitAttr(value);
           nodeAttrValues = {};
           objAttrValues = {};
           tmp.forEach(function(str,i) {
