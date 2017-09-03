@@ -301,7 +301,7 @@ tester.push(function (id) {
             )
         )
     ) +
-      div.main[style="height:calc(100vh - 45px);"]
+      div.main[style="height:calc(100vh - 45px);" 123=>#$123]
   `);
 
   test.bindData({

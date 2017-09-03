@@ -151,7 +151,8 @@ function Emmet(str,data){
           closeSymbolIndex = this.sourseStr.indexOf(']' ,startIndex+1);
 
           value = this.sourseStr.slice(startIndex+1 , closeSymbolIndex).trim();
-          tmp = value.match(/(.*)=>?['"]*([^'"]*)['"]*/g);
+          tmp = value.match(/([\d\w\@\$]*)=>?['"]*([^'"]*)['"]*/g);
+
           nodeAttrValues = {};
           objAttrValues = {};
           tmp.forEach(function(str,i) {
