@@ -94,7 +94,7 @@ function Emmet(str,data){
     var nextConnect = closestSymbolIndex(connectSymbols, parsingIndex),
       startIndex = parsingIndex,
       tmp_arr,
-      mayDeadLoopCheck = 450000000,//在我的机器大概1s的时间
+      mayDeadLoopCheck = 450000000,//在我的机器大概1s的执行时间
       deadLoopCheck;
 
     while (startIndex < nextConnect ){
@@ -151,7 +151,7 @@ function Emmet(str,data){
           closeSymbolIndex = this.sourseStr.indexOf(']' ,startIndex+1);
 
           value = this.sourseStr.slice(startIndex+1 , closeSymbolIndex).trim();
-          tmp = value.split(' ');
+          tmp = value.match(/([\w\@\$]*)=>?['"]*([^'"]*)['"]*/g);
           nodeAttrValues = {};
           objAttrValues = {};
           tmp.forEach(function(str,i) {

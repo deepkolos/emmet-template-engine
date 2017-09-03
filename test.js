@@ -284,10 +284,10 @@ tester.push(function (id) {
   var test = new Emmet(`
     div[style="width:100vw;height:100vh;"] > (
       div.topBar.flex > ( 
-        div.back
-          [click="#back"]
-          {特殊图} > 
-          img[src="/data/littleChat/topbar-back-icon.png" alt=""]
+          div.back
+            [click="#back"]
+            {特殊图} 
+            > img[src="/data/littleChat/topbar-back-icon.png" alt=""]
         ) + (
           div.center.flex >
             div.inputBar.flex > (
@@ -300,8 +300,8 @@ tester.push(function (id) {
                 img[src="/data/littleChat/voice-small-icon.png" alt=""]
             )
         )
-      ) +
-      div.main[style="height:calc(100vh-45px);"]
+    ) +
+      div.main[style="height:calc(100vh - 45px);"]
   `);
 
   test.bindData({
@@ -321,5 +321,5 @@ tester.push(function (id) {
   });
 });
 
-// tester.run(tester.length-1);
-tester.run();
+tester.run(tester.length-1);
+// tester.run();
