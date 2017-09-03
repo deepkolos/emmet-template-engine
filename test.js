@@ -284,7 +284,9 @@ tester.push(function (id) {
   var test = new Emmet(`
     div[style="width:100vw;height:100vh;"] > (
       div.topBar.flex > ( 
-        div.back[click="#back"] > 
+        div.back
+          [click="#back"]
+          {特殊图} > 
           img[src="/data/littleChat/topbar-back-icon.png" alt=""]
         ) + (
           div.center.flex >
@@ -307,7 +309,7 @@ tester.push(function (id) {
   });
 
   var result = [
-    `<div>click and mousemove</div>`
+    `<div style="width:100vw;height:100vh;"><div class="topBar flex"><div class="back" click="#back">特殊图<img src="/data/littleChat/topbar-back-icon.png" alt=""></div><div class="center flex"><div class="inputBar flex"><div class="icon search"><img src="/data/littleChat/search-small-icon.png" alt=""></div><input type="text" class="input" placeholder="搜索"><div class="icon voice"><img src="/data/littleChat/voice-small-icon.png" alt=""></div></div></div></div><div class="main" style="height:calc(100vh-45px);"></div></div>`
   ];
 
   test.parse().forEach(function (element, i) {
@@ -319,5 +321,5 @@ tester.push(function (id) {
   });
 });
 
-tester.run(tester.length-1);
-// tester.run();
+// tester.run(tester.length-1);
+tester.run();

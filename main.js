@@ -92,12 +92,20 @@ function Emmet(str,data){
   
   var parseDecorate = function(){
     var nextConnect = closestSymbolIndex(connectSymbols, parsingIndex),
-        startIndex = parsingIndex,
-        tmp_arr;
+      startIndex = parsingIndex,
+      tmp_arr,
+      mayDeadLoopCheck = 450000000,//在我的机器大概1s的时间
+      deadLoopCheck;
 
     while (startIndex < nextConnect ){
       var nextDecorate = closestSymbolIndex(decorateSymbols, startIndex+1),
           value, values, tmp, closeSymbolIndex;
+
+      deadLoopCheck = startIndex;
+      if(mayDeadLoopCheck-- < 0 ){
+        console.log("循环次数太多了,可能有死循环,退出编译");
+        return null;
+      }
 
       if(nextDecorate > nextConnect)
         nextDecorate = nextConnect;
@@ -217,6 +225,11 @@ function Emmet(str,data){
             //error
           }
         break;
+      }
+
+      if (deadLoopCheck == startIndex) {
+        console.log("parseDecorate检测到deadLoop,退出编译");
+        return null;
       }
     }
 
@@ -452,11 +465,14 @@ function Emmet(str,data){
   }
 
   this.parse = function(){
-    var temp ,len = this.sourseStr.length;
+    var temp ,len = this.sourseStr.length,
+      deadLoopCheck;
 
     path.push(root);
 
     for(parsingIndex = 0 ; parsingIndex < len; ){
+      deadLoopCheck = parsingIndex;
+
       if("\n\t\r ".indexOf(str[parsingIndex]) > -1){//跳过
         parsingIndex++;
         continue;
@@ -533,6 +549,11 @@ function Emmet(str,data){
           path.top().push(elemment);
         else
           console.log('%c注意层级不能溢出,看看 ^ 有没有问题~~',console_notice_style);
+      }
+
+      if (deadLoopCheck == parsingIndex) {
+        console.log("parse检测到deadLoop,退出编译");
+        return null;
       }
     }
     return parseToDom(root);
