@@ -309,7 +309,7 @@ tester.push(function (id) {
   });
 
   var result = [
-    `<div style="width:100vw;height:100vh;"><div class="topBar flex"><div class="back" click="#back">特殊图<img src="/data/littleChat/topbar-back-icon.png" alt=""></div><div class="center flex"><div class="inputBar flex"><div class="icon search"><img src="/data/littleChat/search-small-icon.png" alt=""></div><input type="text" class="input" placeholder="搜索"><div class="icon voice"><img src="/data/littleChat/voice-small-icon.png" alt=""></div></div></div></div><div class="main" style="height:calc(100vh-45px);"></div></div>`
+    `<div style="width:100vw;height:100vh;"><div class="topBar flex"><div class="back" click="#back">特殊图<img src="/data/littleChat/topbar-back-icon.png"></div><div class="center flex"><div class="inputBar flex"><div class="icon search"><img src="/data/littleChat/search-small-icon.png"></div><input type="text"><div class="icon voice"><img src="/data/littleChat/voice-small-icon.png"></div></div></div></div><div class="main" style="height:calc(100vh - 45px);"></div></div>`
   ];
 
   test.parse().forEach(function (element, i) {
