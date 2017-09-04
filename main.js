@@ -246,7 +246,7 @@ function Emmet(str,data){
         break;
         case '{':
           closeSymbolIndex = this.sourseStr.indexOf('}' ,startIndex+1);
-          if(closeSymbolIndex === nextDecorate){
+          if(closeSymbolIndex === nextDecorate){//这里有问题,之后再debug好了
             value = this.sourseStr.slice(startIndex+1 , closeSymbolIndex);
             if(value[0] == '$'){
               getObjectOf(elemment,'noneDetermineValue').content = value;
@@ -258,6 +258,9 @@ function Emmet(str,data){
             startIndex = nextDecorate + 1;
           }else{
             //error
+            console.log('here');
+            debugger;
+            return '';
           }
         break;
       }
@@ -324,15 +327,24 @@ function Emmet(str,data){
 
     ndv.id && (elem.id = getValue(ndv.id,boundArr));
     ndv.content && (elem.content = getValue(ndv.content,boundArr));
-    ndv.class &&
-      forEachObject(ndv.class,function(value){
+    if(ndv.class){
+      forEachObject(ndv.class,function(value,i){
         var arr = getValue(value,boundArr);
-        elem.class.shift();
+        delete elem.class[i];
         if(arr instanceof Array)
           elem.class = elem.class.concat(arr);
         else
           elem.class.push(arr);
       });
+
+      !function(){
+        trimClass = [];
+        elem.class.forEach(function (className) {
+          className && trimClass.push(className);
+        });
+        elem.class = trimClass;
+      }();
+    }
     
     var bindAttr = function(attributeType){
       if(ndv[attributeType]){

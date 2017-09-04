@@ -333,5 +333,105 @@ tester.push(function (id) {
   });
 });
 
-tester.run(tester.length-1);
-// tester.run();
+tester.push(function (id) {
+  //测试修饰符.和#及其导入
+
+  var test = new Emmet(`
+    (
+      div#$commentId.comment_row.comment_list > (
+        img.photo[src=$avatarUrl onclick=$avatarClick] +
+        div.info > (
+          div.name{$nickName} +
+          div.time{$time} > 
+            div.firstCom.iconfont[onclick=@newReplayToComment]{@fix0} ^
+          div.comment{$content} + 
+          div.info.secInfo > (
+            div.iconfont{@fix1} +
+            div.subCommentsContainer{@subCommentsDom} +
+            div.togglrmore.openmore[onclick=@openmore]{$replayLen} +
+            div.togglrmore.closemore[onclick=@closemore]{收起}
+          )
+        )
+      )
+    ) * @comments
+  `);
+
+  var comments = [
+    {
+      id: '评论id',//应该是需要的,用于关联子评论
+      useId: '评论用户id',
+      avatar: '头像url',
+      nickName: '名字',
+      created_time: '创建时间,时间戳形式,后期可以该为xxx分钟前,并且动态更新',
+      content: '评论内容',
+      subComment: [//数组
+        {
+          formName: '发送回复用户名字',
+          formId: '发送回复用户id',//如果是直接回复评论的话, 就返回NULL
+          toName: '接受用户名字',
+          toId: '接受用户Id',
+          content: '回复内容'
+        }
+      ]
+    }
+  ];
+
+  test.bindData({
+    comments: comments,
+    fix0: '&#xe63b;',
+    fix1: '&#xe638;',
+    newReplayToComment: function () {
+
+    },
+    openmore: function () {
+      console.log(this);
+    },
+    closemore: function () {
+
+    }
+  });
+
+  var result = [
+    `<div id="id_covered" class="class_0 imported_str imported_arr_0 imported_arr_1"></div>`
+  ];
+
+  test.parse().forEach(function (element, i) {
+    if (element.outerHTML != result[i]) {
+      tester.fail(id, element, result[i]);
+    } else
+      tester.success(id, element);
+  });
+});
+
+tester.push(function (id) {
+  //测试修饰符.和#及其导入
+
+  var test = new Emmet(`
+    div.class_0.$class_import_str.$class_import_str.$class_import_arr#id#id_covered * @arr
+  `);
+
+  test.bindData({
+    arr:[{
+      class_import_str: 'imported_str',
+      class_import_arr: [
+        'imported_arr_0',
+        'imported_arr_1'
+      ]
+    }]
+  });
+
+  var result = [
+    `<div id="id_covered" class="class_0 imported_str imported_str imported_arr_0 imported_arr_1"></div>`
+  ];
+
+  test.parse().forEach(function (element, i) {
+    if (element.outerHTML != result[i]) {
+      tester.fail(id, element, result[i]);
+    } else
+      tester.success(id, element);
+  });
+});
+
+
+// tester.run(tester.length-1);
+tester.run();
