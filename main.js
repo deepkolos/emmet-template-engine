@@ -104,6 +104,7 @@ function Emmet(str,data){
       deadLoopCheck = startIndex;
       if(mayDeadLoopCheck-- < 0 ){
         console.log("循环次数太多了,可能有死循环,退出编译");
+        startIndex++;
         return null;
       }
 
@@ -267,6 +268,7 @@ function Emmet(str,data){
 
       if (deadLoopCheck == startIndex) {
         console.log("parseDecorate检测到deadLoop,退出编译");
+        startIndex++;
         return null;
       }
     }
@@ -480,7 +482,7 @@ function Emmet(str,data){
       config.id && node.setAttribute('id',config.id);
       config.class && node.setAttribute('class',config.class.join(' '));
       if(config.content){
-        typeof config.content === 'string' && (node.innerHTML = config.content);
+        (typeof config.content === 'string' || typeof config.content === 'number') && (node.innerHTML = config.content);
 
         config.content instanceof HTMLElement && node.appendChild(config.content);
 
@@ -600,6 +602,7 @@ function Emmet(str,data){
 
       if (deadLoopCheck == parsingIndex) {
         console.log("parse检测到deadLoop,退出编译");
+        parsingIndex++;
         return null;
       }
     }
