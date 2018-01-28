@@ -23,14 +23,19 @@ function objectClone(obj,copyLevel){
 }
 
 function objectEqual(obj1, obj2){
+  var result;
   if(obj2 == undefined)
     return false;
   for(var i in obj1){
     if(typeof obj1[i] !== 'object'){
       if(obj1[i] != obj2[i])
         return false;
-    }else
-      return objectEqual(obj1[i],obj2[i]);
+    } else {
+      result = objectEqual(obj1[i],obj2[i]);
+
+      if (result === false) 
+        return false;
+    }
   }
   return true;
 }

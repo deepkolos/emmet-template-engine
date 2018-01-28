@@ -339,10 +339,10 @@ tester.push(function (id) {
   var test = new Emmet(`
     (
       div#$commentId.comment_row.comment_list > (
-        img.photo[src=$avatarUrl onclick=$avatarClick] +
+        img.photo[src=$avatar onclick=@avatarClick] +
         div.info > (
           div.name{$nickName} +
-          div.time{$time} > 
+          div.time{$created_time} > 
             div.firstCom.iconfont[onclick=@newReplayToComment]{@fix0} ^
           div.comment{$content} + 
           div.info.secInfo > (
@@ -380,6 +380,9 @@ tester.push(function (id) {
     comments: comments,
     fix0: '&#xe63b;',
     fix1: '&#xe638;',
+    avatarClick: function(){
+      
+    },
     newReplayToComment: function () {
 
     },
@@ -388,11 +391,20 @@ tester.push(function (id) {
     },
     closemore: function () {
 
-    }
+    },
+    subCommentsDom: (new Emmet(``, comments.subComment)).parse()
   });
 
   var result = [
-    `<div id="id_covered" class="class_0 imported_str imported_arr_0 imported_arr_1"></div>`
+    `<div class="comment_row comment_list"><img class="photo" src="头像url" onclick="function(){
+      
+    }"><div class="info"><div class="name">名字</div><div class="time">创建时间,时间戳形式,后期可以该为xxx分钟前,并且动态更新<div class="firstCom iconfont" onclick="function () {
+
+    }"></div></div><div class="comment">评论内容</div><div class="info secInfo"><div class="iconfont"></div><div class="subCommentsContainer"></div><div class="togglrmore openmore" onclick="function () {
+      console.log(this);
+    }"></div><div class="togglrmore closemore" onclick="function () {
+
+    }">收起</div></div></div></div>`
   ];
 
   test.parse().forEach(function (element, i) {
